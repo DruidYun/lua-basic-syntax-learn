@@ -29,5 +29,33 @@ myObj:Test()
 myObj.id = 2
 print(Object.id)
 print("********************继承********************")
-
+--c# class 类名:继承类
+--写一个继承用的方法
+function Object:subClass( className )
+	-- _G知识点 是总表 所有声明的全局标量 都是以键值对的形式存在其中
+	_G[className] = {}
+	--写相关继承规则
+	--用到元表
+	local obj = _G[className]
+	--self.__index = self
+	setmetatable(obj,self)
+end
+--[[print(_G)
+_G["a"] = 1
+_G.b = 2
+print(a)
+print(b)--]]
+Object:subClass("Person")
+--[[print(Person)
+print(Person.id)
+Person:Test()]]--
+local  p1 = Person:new()
+print(p1.id)
+p1.id = 100
+print(p1.id)
+p1:Test()
+Object:subClass("Monster")
+local m1 = Monster:new()
+print(m1.id)
+m1:Test()
 print("********************多态********************")
