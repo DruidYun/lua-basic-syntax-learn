@@ -37,7 +37,7 @@ function Object:subClass( className )
 	--写相关继承规则
 	--用到元表
 	local obj = _G[className]
-	--self.__index = self
+	self.__index = self
 	setmetatable(obj,self)
 end
 --[[print(_G)
@@ -49,7 +49,7 @@ Object:subClass("Person")
 --[[print(Person)
 print(Person.id)
 Person:Test()]]--
-local  p1 = Person:new()
+local p1 = Person:new()
 print(p1.id)
 p1.id = 100
 print(p1.id)
@@ -59,3 +59,19 @@ local m1 = Monster:new()
 print(m1.id)
 m1:Test()
 print("********************多态********************")
+--相同行为 不同表象 就是多态
+--形同方法 不同执行逻辑 就是多态
+Object:subClass("GameObject")
+GameObject.posX = 0;
+GameObject.posY = 0;
+function GameObject:Move()
+	self.posX = self.posX + 1
+	self.posY = self.posY + 1
+	print(self.posX)
+	print(self.posY)
+end
+
+GameObject:subClass("Player")
+local player1 = Player:new()
+--player1:Move()
+ 
