@@ -38,6 +38,8 @@ function Object:subClass( className )
 	--用到元表
 	local obj = _G[className]
 	self.__index = self
+	--子类 定义个base属性 base属性代表父类
+	obj.base = self
 	setmetatable(obj,self)
 end
 --[[print(_G)
@@ -60,7 +62,7 @@ print(m1.id)
 m1:Test()
 print("********************多态********************")
 --相同行为 不同表象 就是多态
---形同方法 不同执行逻辑 就是多态
+--相同方法 不同执行逻辑 就是多态
 Object:subClass("GameObject")
 GameObject.posX = 0;
 GameObject.posY = 0;
@@ -72,6 +74,19 @@ function GameObject:Move()
 end
 
 GameObject:subClass("Player")
-local player1 = Player:new()
---player1:Move()
- 
+function Player:Move()
+	--base 指的是 GameObject表（类）
+	--这种方式调用 相当与是基类表 作为第一个参数传入了方法中
+	--避免把基类表 传入到方法中 这样相当于就是公用一张表的属性
+	--我们如果要执行父类逻辑 我们不要直接使用冒号调用
+	--要通过 调用 然后自己传入第一个参数
+	self.base.Move(self)
+end
+local p1 = Player:new()
+p1:Move()
+p1:Move()
+ --目前这种写法有坑 不同对象使用的成员变量 居然是相同的成员变量
+ --不是自己的
+local p2 = Player:new()
+p2:Move()
+
